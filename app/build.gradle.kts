@@ -97,65 +97,65 @@ android {
 }
 
 dependencies {
-    val composeBom = platform(libs.findLibrary("compose-bom").get())
+    val composeBom = platform("androidx.compose:compose-bom:2024.02.01")
     implementation(composeBom)
     
     // Android Core
-    implementation(libs.findLibrary("androidx-core-ktx").get())
-    implementation(libs.findLibrary("androidx-lifecycle-runtime-ktx").get())
-    implementation(libs.findLibrary("androidx-activity-compose").get())
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.activity:activity-compose:1.8.2")
     
     // Compose UI
-    implementation(libs.findLibrary("compose-ui").get())
-    implementation(libs.findLibrary("compose-ui-graphics").get())
-    implementation(libs.findLibrary("compose-ui-tooling-preview").get())
-    implementation(libs.findLibrary("compose-material3").get())
-    implementation(libs.findLibrary("compose-material-icons-extended").get())
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
     
     // Navigation
-    implementation(libs.findLibrary("compose-navigation").get())
+    implementation("androidx.navigation:navigation-compose:2.7.6")
     
     // ViewModel
-    implementation(libs.findLibrary("androidx-lifecycle-viewmodel-compose").get())
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     
     // Room Database
-    implementation(libs.findLibrary("room-runtime").get())
-    implementation(libs.findLibrary("room-ktx").get())
-    kapt(libs.findLibrary("room-compiler").get())
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     
     // Hilt
-    implementation(libs.findLibrary("hilt-android").get())
-    kapt(libs.findLibrary("hilt-compiler").get())
-    implementation(libs.findLibrary("androidx-hilt-navigation-compose").get())
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     
     // Coroutines
-    implementation(libs.findLibrary("kotlinx-coroutines-android").get())
-    implementation(libs.findLibrary("kotlinx-coroutines-core").get())
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     
     // Serialization
-    implementation(libs.findLibrary("kotlinx-serialization-json").get())
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     
     // DataStore
-    implementation(libs.findLibrary("androidx-datastore-preferences").get())
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     
     // Coil for image loading
-    implementation(libs.findLibrary("coil-compose").get())
+    implementation("io.coil-kt:coil-compose:2.6.0")
     
     // Testing
-    testImplementation(libs.findLibrary("junit").get())
-    testImplementation(libs.findLibrary("kotlinx-coroutines-test").get())
-    testImplementation(libs.findLibrary("androidx-test-core").get())
-    testImplementation(libs.findLibrary("androidx-test-ext-junit").get())
-    testImplementation(libs.findLibrary("mockk").get())
-    testImplementation(libs.findLibrary("room-testing").get())
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("androidx.room:room-testing:2.6.1")
     
     androidTestImplementation(composeBom)
-    androidTestImplementation(libs.findLibrary("androidx-test-ext-junit").get())
-    androidTestImplementation(libs.findLibrary("androidx-test-espresso-core").get())
-    androidTestImplementation(libs.findLibrary("compose-ui-test-junit4").get())
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     
-    debugImplementation(libs.findLibrary("compose-ui-tooling").get())
-    debugImplementation(libs.findLibrary("compose-ui-test-manifest").get())
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
 // Configure dependency check
