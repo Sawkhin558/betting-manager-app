@@ -161,7 +161,7 @@ dependencies {
 // Configure dependency check
 dependencyCheck {
     format = "ALL"
-    suppressionFile = file("$projectDir/dependency-check-suppressions.xml")
+    suppressionFile = "$projectDir/dependency-check-suppressions.xml"
     failBuildOnCVSS = 7.0f
     skipConfigurations = listOf("lintClassPath")
 }
@@ -171,7 +171,7 @@ tasks.register("generateKeystore") {
     doLast {
         val keystoreFile = file("keystore.jks")
         if (!keystoreFile.exists()) {
-            exec {
+            project.exec {
                 commandLine(
                     "keytool",
                     "-genkey",
@@ -198,7 +198,7 @@ tasks.register("encodeKeystore") {
     doLast {
         val keystoreFile = file("keystore.jks")
         if (keystoreFile.exists()) {
-            exec {
+            project.exec {
                 commandLine("base64", "-w", "0", keystoreFile.absolutePath)
             }
             println("\n\nCopy the base64 output above and save it as KEYSTORE_BASE64 GitHub Secret")
