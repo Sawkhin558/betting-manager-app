@@ -12,9 +12,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bettingapp.ui.dashboard.DashboardHeader
-import com.example.bettingapp.ui.tabs.*
-import com.example.bettingapp.database.SettingsEntity
+import com.betting.manager.ui.dashboard.DashboardHeader
+import com.betting.manager.ui.tabs.*
+import com.betting.manager.database.SettingsEntity
 import kotlinx.coroutines.flow.collectAsState
 import kotlinx.coroutines.flow.StateFlow
 
@@ -114,7 +114,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
-    private val repository: com.example.bettingapp.repository.BettingRepository
+    private val repository: com.betting.manager.repository.BettingRepository
 ) : ViewModel() {
     
     private val _totalSales = MutableStateFlow(0.0)
