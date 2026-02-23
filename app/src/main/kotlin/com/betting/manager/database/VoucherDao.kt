@@ -4,8 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
+import androidx.room.Relation
 import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -44,6 +45,11 @@ interface VoucherDao {
 }
 
 data class VoucherWithEntries(
+    @Embedded
     val voucher: VoucherEntity,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "voucher_id"
+    )
     val entries: List<EntryEntity>
 )
