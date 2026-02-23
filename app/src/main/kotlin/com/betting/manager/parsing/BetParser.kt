@@ -1,7 +1,7 @@
 package com.betting.manager.parsing
 
-import com.example.bettingapp.database.BetType
-import com.example.bettingapp.database.EntryEntity
+import com.betting.manager.database.BetType
+import com.betting.manager.database.EntryEntity
 
 class BetParser(private val directMultiplier: Double = 80.0, private val rolledMultiplier: Double = 500.0) {
     

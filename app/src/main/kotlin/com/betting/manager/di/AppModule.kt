@@ -1,9 +1,14 @@
 package com.betting.manager.di
 
 import android.content.Context
-import com.example.bettingapp.database.AppDatabase
-import com.example.bettingapp.parsing.BetParser
-import com.example.bettingapp.repository.BettingRepository
+import com.betting.manager.database.AppDatabase
+import com.betting.manager.database.SettingsDao
+import com.betting.manager.database.VoucherDao
+import com.betting.manager.database.EntryDao
+import com.betting.manager.database.MasterHistoryDao
+import com.betting.manager.database.ClearedLimitDao
+import com.betting.manager.parsing.BetParser
+import com.betting.manager.repository.BettingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,11 +55,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideBettingRepository(
-        settingsDao: com.example.bettingapp.database.SettingsDao,
-        voucherDao: com.example.bettingapp.database.VoucherDao,
-        entryDao: com.example.bettingapp.database.EntryDao,
-        masterHistoryDao: com.example.bettingapp.database.MasterHistoryDao,
-        clearedLimitDao: com.example.bettingapp.database.ClearedLimitDao
+        settingsDao: SettingsDao,
+        voucherDao: VoucherDao,
+        entryDao: EntryDao,
+        masterHistoryDao: MasterHistoryDao,
+        clearedLimitDao: ClearedLimitDao
     ): BettingRepository {
         return BettingRepository(
             settingsDao = settingsDao,

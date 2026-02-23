@@ -1,6 +1,6 @@
 package com.betting.manager.repository
 
-import com.example.bettingapp.database.*
+import com.betting.manager.database.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
