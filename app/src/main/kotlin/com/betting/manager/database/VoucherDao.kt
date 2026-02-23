@@ -44,13 +44,3 @@ interface VoucherDao {
     @Query("SELECT * FROM vouchers WHERE id = :voucherId")
     fun getVoucherWithEntries(voucherId: Long): Flow<VoucherWithEntries>
 }
-
-data class VoucherWithEntries(
-    @Embedded
-    val voucher: VoucherEntity,
-    @Relation(
-        parentColumn = "id",
-        entityColumn = "voucher_id"
-    )
-    val entries: List<EntryEntity>
-)
