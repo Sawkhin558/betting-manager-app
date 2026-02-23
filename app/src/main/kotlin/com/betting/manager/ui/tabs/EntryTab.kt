@@ -1,22 +1,53 @@
 package com.betting.manager.ui.tabs
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.bettingapp.parsing.BetParser
-import com.example.bettingapp.database.EntryEntity
-import com.example.bettingapp.database.BetType
+import com.betting.manager.database.BetType
+import com.betting.manager.database.EntryEntity
+import com.betting.manager.parsing.BetParser
+import com.betting.manager.repository.BettingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun EntryTab(
@@ -201,15 +232,8 @@ private fun EntryPreviewItem(entry: EntryEntity) {
     }
 }
 
-// ViewModel for EntryTab
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-
 class EntryViewModel(
-    private val repository: com.example.bettingapp.repository.BettingRepository,
+    private val repository: BettingRepository,
     private val betParser: BetParser
 ) : ViewModel() {
     
@@ -231,7 +255,7 @@ class EntryViewModel(
                 
                 // Create voucher
                 val voucherId = repository.insertVoucher(
-                    com.example.bettingapp.database.VoucherEntity(
+                    com.betting.manager.database.VoucherEntity(
                         rawText = rawText,
                         totalAmount = result.totalAmount,
                         entryCount = result.entries.size

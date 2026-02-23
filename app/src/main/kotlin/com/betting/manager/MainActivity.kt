@@ -3,20 +3,41 @@ package com.betting.manager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Modifier
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.weight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.StateFlow
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.betting.manager.ui.dashboard.DashboardHeader
-import com.betting.manager.ui.tabs.*
-import com.betting.manager.database.SettingsEntity
+import com.betting.manager.ui.tabs.EntryTab
+import com.betting.manager.ui.tabs.MasterHistoryTab
+import com.betting.manager.ui.tabs.ReportTab
+import com.betting.manager.ui.tabs.VouchersTab
+import com.betting.manager.repository.BettingRepository
 import kotlinx.coroutines.flow.collectAsState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +129,6 @@ fun BettingAppTheme(
 }
 
 // ViewModel for dashboard data
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-
 class DashboardViewModel(
     private val repository: com.betting.manager.repository.BettingRepository
 ) : ViewModel() {
@@ -178,10 +194,6 @@ class DashboardViewModel(
         loadDashboardData()
     }
 }
-
-// Color schemes
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 
 private fun darkColorScheme() = darkColorScheme(
     primary = androidx.compose.ui.graphics.Color(0xFFBB86FC),
