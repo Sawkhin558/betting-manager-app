@@ -44,9 +44,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.betting.manager.database.VoucherEntity
 import com.betting.manager.repository.BettingRepository
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectAsState
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -57,7 +57,7 @@ fun VouchersTab(
     modifier: Modifier = Modifier,
     viewModel: VouchersViewModel = viewModel()
 ) {
-    val vouchers by viewModel.vouchers.collectAsState(emptyList())
+    val vouchers by viewModel.vouchers.collectAsState(initial = emptyList<VoucherEntity>())
     var showDeleteDialog by remember { mutableStateOf(false) }
     var selectedVoucherId by remember { mutableStateOf<Long?>(null) }
     var showForwardDialog by remember { mutableStateOf(false) }
@@ -119,7 +119,7 @@ fun VouchersTab(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(vouchers) { voucher ->
+                items(vouchers) { voucher: VoucherEntity ->
                     VoucherCard(
                         voucher = voucher,
                         onEdit = { /* TODO: Implement edit */ },

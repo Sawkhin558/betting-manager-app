@@ -1,6 +1,7 @@
 package com.betting.manager.ui.tabs
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Divider
 import androidx.compose.foundation.layout.Row
@@ -47,9 +48,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.betting.manager.database.GroupedEntry
 import com.betting.manager.repository.BettingRepository
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectAsState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,9 +58,9 @@ fun ReportTab(
     modifier: Modifier = Modifier,
     viewModel: ReportViewModel = viewModel()
 ) {
-    val selfReport by viewModel.selfReport.collectAsState(0.0)
-    val masterReport by viewModel.masterReport.collectAsState(0.0)
-    val groupedEntries by viewModel.groupedEntries.collectAsState(emptyList())
+    val selfReport by viewModel.selfReport.collectAsState(initial = 0.0)
+    val masterReport by viewModel.masterReport.collectAsState(initial = 0.0)
+    val groupedEntries by viewModel.groupedEntries.collectAsState(initial = emptyList<GroupedEntry>())
     var selectedFilter by remember { mutableStateOf(ReportFilter.ALL) }
     
     Column(
@@ -201,7 +202,7 @@ fun ReportTab(
                 val filteredEntries = when (selectedFilter) {
                     ReportFilter.ALL -> groupedEntries
                     ReportFilter.TOP_10 -> groupedEntries.take(10)
-                    ReportFilter.HIGH_RISK -> groupedEntries.filter { it.total_amount > 1000 }
+                    ReportFilter.HIGH_RISK -> groupedEntries.filter { ge -> ge.total_amount > 1000 }
                 }
                 
                 if (filteredEntries.isEmpty()) {
@@ -221,7 +222,7 @@ fun ReportTab(
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        items(filteredEntries) { entry ->
+                        items(filteredEntries) { entry: GroupedEntry ->
                             EntryRow(entry = entry)
                         }
                     }
@@ -252,12 +253,12 @@ fun ReportTab(
                     
                     StatItem(
                         label = "Total Amount",
-                        value = "$${String.format("%.2f", groupedEntries.sumOf { it.total_amount })}"
+                        value = "$${String.format("%.2f", groupedEntries.sumOf { ge -> ge.total_amount })}"
                     )
                     
                     StatItem(
                         label = "Avg per Number",
-                        value = "$${String.format("%.2f", if (groupedEntries.isNotEmpty()) groupedEntries.sumOf { it.total_amount } / groupedEntries.size else 0.0)}"
+                        value = "$${String.format("%.2f", if (groupedEntries.isNotEmpty()) groupedEntries.sumOf { ge -> ge.total_amount } / groupedEntries.size else 0.0)}"
                     )
                 }
             }

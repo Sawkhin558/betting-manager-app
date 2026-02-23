@@ -48,9 +48,9 @@ import com.betting.manager.database.BetType
 import com.betting.manager.database.EntryEntity
 import com.betting.manager.parsing.BetParser
 import com.betting.manager.repository.BettingRepository
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectAsState
 import kotlinx.coroutines.launch
 
 @Composable
@@ -166,7 +166,7 @@ fun EntryTab(
         }
         
         // Live preview section
-        val previewEntries by viewModel.previewEntries.collectAsState(emptyList())
+        val previewEntries by viewModel.previewEntries.collectAsState(initial = emptyList<EntryEntity>())
         
         if (previewEntries.isNotEmpty()) {
             Card {
@@ -183,7 +183,7 @@ fun EntryTab(
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        items(previewEntries) { entry ->
+                        items(previewEntries) { entry: EntryEntity ->
                             EntryPreviewItem(entry = entry)
                         }
                     }

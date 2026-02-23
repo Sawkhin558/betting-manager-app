@@ -44,9 +44,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.betting.manager.database.MasterHistoryEntity
 import com.betting.manager.repository.BettingRepository
+import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectAsState
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -57,7 +57,7 @@ fun MasterHistoryTab(
     modifier: Modifier = Modifier,
     viewModel: MasterHistoryViewModel = viewModel()
 ) {
-    val history by viewModel.history.collectAsState(emptyList())
+    val history by viewModel.history.collectAsState(initial = emptyList<MasterHistoryEntity>())
     var showReverseDialog by remember { mutableStateOf(false) }
     var selectedHistoryId by remember { mutableStateOf<Long?>(null) }
     var reverseReason by remember { mutableStateOf("") }
@@ -94,19 +94,19 @@ fun MasterHistoryTab(
         ) {
             StatCard(
                 title = "Total Forwarded",
-                value = history.sumOf { it.forwardedAmount },
+                value = history.sumOf { h -> h.forwardedAmount },
                 modifier = Modifier.weight(1f)
             )
             
             StatCard(
                 title = "Active",
-                value = history.filter { !it.isReversed }.sumOf { it.forwardedAmount },
+                value = history.filter { h -> !h.isReversed }.sumOf { h -> h.forwardedAmount },
                 modifier = Modifier.weight(1f)
             )
             
             StatCard(
                 title = "Reversed",
-                value = history.filter { it.isReversed }.sumOf { it.forwardedAmount },
+                value = history.filter { h -> h.isReversed }.sumOf { h -> h.forwardedAmount },
                 modifier = Modifier.weight(1f)
             )
         }
@@ -145,7 +145,7 @@ fun MasterHistoryTab(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(history) { historyItem ->
+                items(history) { historyItem: MasterHistoryEntity ->
                     HistoryCard(
                         history = historyItem,
                         onReverse = {

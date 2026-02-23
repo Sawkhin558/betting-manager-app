@@ -21,8 +21,9 @@ import com.betting.manager.ui.tabs.MasterHistoryTab
 import com.betting.manager.ui.tabs.ReportTab
 import com.betting.manager.ui.tabs.VouchersTab
 import com.betting.manager.repository.BettingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectAsState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -132,61 +133,58 @@ class DashboardViewModel(
     private val repository: BettingRepository
 ) : ViewModel() {
     
-    private val _totalSales = StateFlow<Double>(0.0)
+    private val _totalSales = MutableStateFlow(0.0)
     val totalSales: StateFlow<Double> = _totalSales
     
-    private val _dailyLimit = StateFlow<Double>(10000.0)
+    private val _dailyLimit = MutableStateFlow(10000.0)
     val dailyLimit: StateFlow<Double> = _dailyLimit
     
-    private val _commissionPercentage = StateFlow<Double>(5.0)
+    private val _commissionPercentage = MutableStateFlow(5.0)
     val commissionPercentage: StateFlow<Double> = _commissionPercentage
     
-    private val _commissionAmount = StateFlow<Double>(0.0)
+    private val _commissionAmount = MutableStateFlow(0.0)
     val commissionAmount: StateFlow<Double> = _commissionAmount
     
-    private val _maxPayout = StateFlow<Double>(0.0)
+    private val _maxPayout = MutableStateFlow(0.0)
     val maxPayout: StateFlow<Double> = _maxPayout
     
-    private val _netProfit = StateFlow<Double>(0.0)
+    private val _netProfit = MutableStateFlow(0.0)
     val netProfit: StateFlow<Double> = _netProfit
     
     init {
-        loadDashboardData()
-        startPeriodicUpdates()
+        startCollecting()
     }
     
-    private fun loadDashboardData() {
+    private fun startCollecting() {
         viewModelScope.launch {
-            // Load settings
             repository.getSettings().collect { settings ->
                 settings?.let {
                     _dailyLimit.value = it.dailyLimit
                     _commissionPercentage.value = it.commissionPercentage
                 }
+                updateNetProfit()
             }
-            
-            // Load sales data
-            val sales = repository.getTotalSales()
-            _totalSales.value = sales
-            _commissionAmount.value = sales * (_commissionPercentage.value / 100)
-            
-            // Load payout data
-            val salesPayout = repository.getTotalSalesAndPayout()
-            _maxPayout.value = salesPayout?.total_potential_payout ?: 0.0
-            _netProfit.value = (_totalSales.value - _commissionAmount.value) - (_maxPayout.value * 0.01)
+        }
+        viewModelScope.launch {
+            repository.getTotalSales().collect { sales ->
+                _totalSales.value = sales
+                _commissionAmount.value = sales * (_commissionPercentage.value / 100)
+                updateNetProfit()
+            }
+        }
+        viewModelScope.launch {
+            repository.getTotalSalesAndPayout().collect { salesPayout ->
+                _maxPayout.value = salesPayout?.total_potential_payout ?: 0.0
+                updateNetProfit()
+            }
         }
     }
     
-    private fun startPeriodicUpdates() {
-        viewModelScope.launch {
-            while (true) {
-                kotlinx.coroutines.delay(30000)
-                loadDashboardData()
-            }
-        }
+    private fun updateNetProfit() {
+        _netProfit.value = (_totalSales.value - _commissionAmount.value) - (_maxPayout.value * 0.01)
     }
     
     fun refresh() {
-        loadDashboardData()
+        // Manual refresh if needed
     }
 }
